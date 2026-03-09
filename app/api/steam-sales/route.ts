@@ -6,7 +6,7 @@ export async function GET() {
   try {
     const raw = fs.readFileSync(
       path.join(process.cwd(), 'data', 'steam-sales.json'),
-      'utf-8'
+      'utf-8',
     );
     const data = JSON.parse(raw);
     const now = new Date();
@@ -20,7 +20,7 @@ export async function GET() {
       .filter((s: { endDate: Date }) => s.endDate > now)
       .sort(
         (a: { startDate: Date }, b: { startDate: Date }) =>
-          a.startDate.getTime() - b.startDate.getTime()
+          a.startDate.getTime() - b.startDate.getTime(),
       );
 
     const next = upcoming[0] || null;
@@ -31,7 +31,7 @@ export async function GET() {
     console.error('Steam sales error:', (err as Error).message);
     return NextResponse.json(
       { error: 'Failed to load steam sales data' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

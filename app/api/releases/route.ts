@@ -17,11 +17,13 @@ interface ReleasesResult {
   games: Game[];
 }
 
-function formatPlatforms(platforms: {
-  windows?: boolean;
-  mac?: boolean;
-  linux?: boolean;
-} | null): string[] {
+function formatPlatforms(
+  platforms: {
+    windows?: boolean;
+    mac?: boolean;
+    linux?: boolean;
+  } | null,
+): string[] {
   if (!platforms) return [];
   const result: string[] = [];
   if (platforms.windows) result.push('PC');
@@ -66,17 +68,10 @@ async function fetchSteamMostWishlisted(): Promise<Game[]> {
 
   const appIdMatches = [...html.matchAll(/data-ds-appid="(\d+)"/g)];
   const titleMatches = [...html.matchAll(/<span class="title">(.*?)<\/span>/g)];
-  const imageMatches = [
-    ...html.matchAll(/src="(https:\/\/[^"]*capsule[^"]+)"/g),
-  ];
+  const imageMatches = [...html.matchAll(/src="(https:\/\/[^"]*capsule[^"]+)"/g)];
 
-  const entries: { appid: string; name: string; searchImage: string | null }[] =
-    [];
-  for (
-    let i = 0;
-    i < Math.min(appIdMatches.length, titleMatches.length);
-    i++
-  ) {
+  const entries: { appid: string; name: string; searchImage: string | null }[] = [];
+  for (let i = 0; i < Math.min(appIdMatches.length, titleMatches.length); i++) {
     entries.push({
       appid: appIdMatches[i][1],
       name: decodeHTMLEntities(titleMatches[i][1]),
@@ -127,15 +122,12 @@ async function fetchSteamMostWishlisted(): Promise<Game[]> {
     if (isNaN(parsed.getTime())) return false;
     const hasDay =
       /\d{1,2}\s+\w+,?\s+\d{4}|\w+\s+\d{1,2},?\s+\d{4}|\d{4}-\d{2}-\d{2}/.test(
-        g.released
+        g.released,
       );
     return hasDay;
   });
 
-  dated.sort(
-    (a, b) =>
-      new Date(a.released!).getTime() - new Date(b.released!).getTime()
-  );
+  dated.sort((a, b) => new Date(a.released!).getTime() - new Date(b.released!).getTime());
 
   return dated;
 }

@@ -34,9 +34,7 @@ interface SaleData {
 }
 
 function dispatchStat(key: string, value: string) {
-  window.dispatchEvent(
-    new CustomEvent('stat-update', { detail: { key, value } })
-  );
+  window.dispatchEvent(new CustomEvent('stat-update', { detail: { key, value } }));
 }
 
 export default function SaleCard() {
@@ -73,10 +71,7 @@ export default function SaleCard() {
           if (data.active) {
             dispatchStat('sale', `${data.next.name} — LIVE!`);
           } else {
-            dispatchStat(
-              'sale',
-              t ? `${data.next.name} in ${t.days}d` : data.next.name
-            );
+            dispatchStat('sale', t ? `${data.next.name} in ${t.days}d` : data.next.name);
           }
         } else {
           dispatchStat('sale', 'No upcoming sales');
@@ -130,18 +125,9 @@ export default function SaleCard() {
           <>
             {/* Sale visual SVG — rendered once, never re-rendered */}
             <div className="sale-visual">
-              <svg
-                viewBox="0 0 80 80"
-                xmlns="http://www.w3.org/2000/svg"
-              >
+              <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
                 <defs>
-                  <linearGradient
-                    id="saleGrad1"
-                    x1="0%"
-                    y1="0%"
-                    x2="100%"
-                    y2="100%"
-                  >
+                  <linearGradient id="saleGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" style={{ stopColor: '#ff4939' }} />
                     <stop offset="100%" style={{ stopColor: '#d93a2d' }} />
                   </linearGradient>
@@ -183,14 +169,10 @@ export default function SaleCard() {
                 <div className="sale-active-badge">
                   <span className="sale-active-dot"></span> LIVE NOW
                 </div>
-                <div className="sale-status">
-                  Ends {formatDate(saleData.next.end)}
-                </div>
+                <div className="sale-status">Ends {formatDate(saleData.next.end)}</div>
               </>
             ) : (
-              <div className="sale-status">
-                Starts {formatDate(saleData.next.start)}
-              </div>
+              <div className="sale-status">Starts {formatDate(saleData.next.start)}</div>
             )}
 
             {/* Countdown — only this part updates every second */}
@@ -202,28 +184,20 @@ export default function SaleCard() {
                     <div className="countdown-label">Days</div>
                   </div>
                   <div className="countdown-unit">
-                    <div className="countdown-value">
-                      {pad(countdown.hours)}
-                    </div>
+                    <div className="countdown-value">{pad(countdown.hours)}</div>
                     <div className="countdown-label">Hours</div>
                   </div>
                   <div className="countdown-unit">
-                    <div className="countdown-value">
-                      {pad(countdown.minutes)}
-                    </div>
+                    <div className="countdown-value">{pad(countdown.minutes)}</div>
                     <div className="countdown-label">Min</div>
                   </div>
                   <div className="countdown-unit">
-                    <div className="countdown-value">
-                      {pad(countdown.seconds)}
-                    </div>
+                    <div className="countdown-value">{pad(countdown.seconds)}</div>
                     <div className="countdown-label">Sec</div>
                   </div>
                 </div>
               ) : (
-                <span className="sale-status">
-                  Happening now or already passed!
-                </span>
+                <span className="sale-status">Happening now or already passed!</span>
               )}
             </div>
           </>

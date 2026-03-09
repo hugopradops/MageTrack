@@ -25,14 +25,12 @@ export async function GET() {
       headers: { 'User-Agent': 'MageTrack/1.0' },
     });
 
-    if (!response.ok)
-      throw new Error(`OpenCritic API returned ${response.status}`);
+    if (!response.ok) throw new Error(`OpenCritic API returned ${response.status}`);
     const data = await response.json();
 
     const games: CriticGame[] = data
       .filter(
-        (g: { topCriticScore?: number }) =>
-          g.topCriticScore && g.topCriticScore > 0
+        (g: { topCriticScore?: number }) => g.topCriticScore && g.topCriticScore > 0,
       )
       .map(
         (g: {
@@ -52,9 +50,7 @@ export async function GET() {
           score: Math.round(g.topCriticScore),
           tier: g.tier || 'N/A',
           releaseDate: g.firstReleaseDate || null,
-          platforms: (g.Platforms || [])
-            .map((p) => p.shortName)
-            .filter(Boolean),
+          platforms: (g.Platforms || []).map((p) => p.shortName).filter(Boolean),
           image:
             g.images && g.images.banner && g.images.banner.og
               ? `https://img.opencritic.com/${g.images.banner.og}`
@@ -62,9 +58,9 @@ export async function GET() {
                 ? `https://img.opencritic.com/${g.images.box.og}`
                 : null,
           url: `https://opencritic.com/game/${g.id}/${encodeURIComponent(
-            g.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+            g.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
           )}`,
-        })
+        }),
       )
       .sort((a: CriticGame, b: CriticGame) => b.score - a.score);
 
@@ -73,9 +69,6 @@ export async function GET() {
     return NextResponse.json(result);
   } catch (err) {
     console.error('OpenCritic error:', (err as Error).message);
-    return NextResponse.json(
-      { error: 'Failed to load critic scores' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to load critic scores' }, { status: 500 });
   }
 }

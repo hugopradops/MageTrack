@@ -34,9 +34,7 @@ function getSourceClass(source: string) {
 }
 
 function dispatchStat(key: string, value: string) {
-  window.dispatchEvent(
-    new CustomEvent('stat-update', { detail: { key, value } })
-  );
+  window.dispatchEvent(new CustomEvent('stat-update', { detail: { key, value } }));
 }
 
 export default function NewsCard() {
@@ -64,13 +62,9 @@ export default function NewsCard() {
     load();
   }, []);
 
-  const totalPages = articles
-    ? Math.ceil(articles.length / NEWS_PER_PAGE)
-    : 0;
+  const totalPages = articles ? Math.ceil(articles.length / NEWS_PER_PAGE) : 0;
   const start = (currentPage - 1) * NEWS_PER_PAGE;
-  const pageArticles = articles
-    ? articles.slice(start, start + NEWS_PER_PAGE)
-    : [];
+  const pageArticles = articles ? articles.slice(start, start + NEWS_PER_PAGE) : [];
 
   return (
     <section className="card card-news" id="news-section">
@@ -122,14 +116,12 @@ export default function NewsCard() {
               {pageArticles.map((a, i) => (
                 <div key={`${a.link}-${i}`} className="news-item">
                   <div className="news-content">
-                    <a href={a.link} target="_blank" rel="noopener">
+                    <a href={a.link} target="_blank" rel="noopener noreferrer">
                       {a.title}
                     </a>
                   </div>
                   <div className="news-meta">
-                    <span
-                      className={`news-source ${getSourceClass(a.source)}`}
-                    >
+                    <span className={`news-source ${getSourceClass(a.source)}`}>
                       {a.source}
                     </span>
                     <span className="news-time">{timeAgo(a.date)}</span>
@@ -139,19 +131,15 @@ export default function NewsCard() {
             </div>
             {totalPages > 1 && (
               <div className="news-pagination">
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                  (page) => (
-                    <button
-                      key={page}
-                      className={`news-page-btn${
-                        page === currentPage ? ' active' : ''
-                      }`}
-                      onClick={() => setCurrentPage(page)}
-                    >
-                      {page}
-                    </button>
-                  )
-                )}
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <button
+                    key={page}
+                    className={`news-page-btn${page === currentPage ? ' active' : ''}`}
+                    onClick={() => setCurrentPage(page)}
+                  >
+                    {page}
+                  </button>
+                ))}
               </div>
             )}
           </>

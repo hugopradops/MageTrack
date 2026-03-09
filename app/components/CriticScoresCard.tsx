@@ -92,11 +92,12 @@ export default function CriticScoresCard() {
                   key={g.id}
                   href={g.url}
                   target="_blank"
-                  rel="noopener"
+                  rel="noopener noreferrer"
                   className={`review-item ${cls}`}
                 >
                   <div className="review-thumb">
                     {g.image ? (
+                      /* eslint-disable-next-line @next/next/no-img-element */
                       <img src={g.image} alt={g.name} loading="lazy" />
                     ) : (
                       <div className="review-thumb-placeholder">?</div>

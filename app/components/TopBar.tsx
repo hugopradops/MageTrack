@@ -38,15 +38,8 @@ export default function TopBar() {
       if (key === 'releases') setReleasesText(value);
       if (key === 'news') setNewsText(value);
     };
-    window.addEventListener(
-      'stat-update',
-      handler as EventListener
-    );
-    return () =>
-      window.removeEventListener(
-        'stat-update',
-        handler as EventListener
-      );
+    window.addEventListener('stat-update', handler as EventListener);
+    return () => window.removeEventListener('stat-update', handler as EventListener);
   }, []);
 
   return (

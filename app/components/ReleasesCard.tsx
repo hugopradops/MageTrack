@@ -22,11 +22,9 @@ function relativeTime(dateStr: string | null) {
   const releaseMid = new Date(
     release.getFullYear(),
     release.getMonth(),
-    release.getDate()
+    release.getDate(),
   );
-  const days = Math.round(
-    (releaseMid.getTime() - todayMid.getTime()) / 86400000
-  );
+  const days = Math.round((releaseMid.getTime() - todayMid.getTime()) / 86400000);
   if (days < 0) return 'Released';
   if (days === 0) return 'Today!';
   if (days === 1) return 'Tomorrow!';
@@ -46,8 +44,7 @@ function stringToColor(str: string): [string, string] {
     ['rgba(251, 191, 36, 0.12)', 'rgba(217, 119, 6, 0.06)'],
   ];
   let hash = 0;
-  for (let i = 0; i < str.length; i++)
-    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
   return colors[Math.abs(hash) % colors.length];
 }
 
@@ -72,9 +69,7 @@ function getPlatformIcons(platforms: string[]) {
 }
 
 function dispatchStat(key: string, value: string) {
-  window.dispatchEvent(
-    new CustomEvent('stat-update', { detail: { key, value } })
-  );
+  window.dispatchEvent(new CustomEvent('stat-update', { detail: { key, value } }));
 }
 
 export default function ReleasesCard() {
@@ -154,19 +149,18 @@ export default function ReleasesCard() {
                   key={g.appid}
                   href={`https://store.steampowered.com/app/${g.appid}`}
                   target="_blank"
-                  rel="noopener"
+                  rel="noopener noreferrer"
                   className="release-card"
                 >
                   <div className="release-img-wrap">
                     {g.image && !imgErrors.has(g.appid) ? (
+                      /* eslint-disable-next-line @next/next/no-img-element */
                       <img
                         className="release-img"
                         src={g.image}
                         alt={g.name}
                         loading="lazy"
-                        onError={() =>
-                          setImgErrors((prev) => new Set(prev).add(g.appid))
-                        }
+                        onError={() => setImgErrors((prev) => new Set(prev).add(g.appid))}
                       />
                     ) : (
                       <div
@@ -182,16 +176,10 @@ export default function ReleasesCard() {
                   </div>
                   <div className="release-info">
                     <h3>{g.name}</h3>
-                    <div className="release-date">
-                      {g.released || 'Coming Soon'}
-                    </div>
-                    <div className="release-countdown">
-                      {relativeTime(g.released)}
-                    </div>
+                    <div className="release-date">{g.released || 'Coming Soon'}</div>
+                    <div className="release-countdown">{relativeTime(g.released)}</div>
                     {g.genres && g.genres.length > 0 && (
-                      <div className="release-genres">
-                        {g.genres.join(' · ')}
-                      </div>
+                      <div className="release-genres">{g.genres.join(' · ')}</div>
                     )}
                   </div>
                 </a>
