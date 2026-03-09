@@ -38,7 +38,7 @@ html, body {
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -95,7 +95,7 @@ body::before {
   75% { transform: translate(40px, 30px); }
 }
 
-#particles {
+.particles-canvas {
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
@@ -160,7 +160,7 @@ body::before {
 .topbar-brand { line-height: 1.1; }
 
 .topbar-title {
-  font-family: 'Cinzel', serif;
+  font-family: var(--font-cinzel), serif;
   font-size: 1.1rem;
   font-weight: 900;
   background: linear-gradient(135deg, var(--accent) 0%, #fff 40%, var(--accent2) 70%, var(--accent3) 100%);
@@ -172,7 +172,7 @@ body::before {
 }
 
 .topbar-subtitle {
-  font-family: 'Cinzel', serif;
+  font-family: var(--font-cinzel), serif;
   color: var(--text-dim);
   font-size: 0.5rem;
   letter-spacing: 0.18em;
@@ -275,7 +275,7 @@ body::before {
 }
 
 .card-header h2 {
-  font-family: 'Cinzel', serif;
+  font-family: var(--font-cinzel), serif;
   font-size: 0.82rem;
   font-weight: 700;
   color: var(--text);
@@ -404,7 +404,7 @@ body::before {
 @keyframes rotate-slow { to { transform: rotate(360deg); } }
 
 .sale-name {
-  font-family: 'Cinzel', serif;
+  font-family: var(--font-cinzel), serif;
   font-size: clamp(1.35rem, 2.5vw, 2.4rem);
   color: var(--accent);
   margin-bottom: 0.05rem;
@@ -470,7 +470,7 @@ body::before {
 }
 
 .countdown-value {
-  font-family: 'Cinzel', serif;
+  font-family: var(--font-cinzel), serif;
   font-size: clamp(1.6rem, 2.5vw, 3rem);
   font-weight: 900;
   color: var(--accent);
@@ -567,7 +567,7 @@ body::before {
   white-space: nowrap;
 }
 
-/* Score color tiers — Metacritic style */
+/* Score color tiers */
 .mc-score {
   display: flex;
   align-items: center;
@@ -721,15 +721,6 @@ body::before {
   text-overflow: ellipsis;
 }
 
-.release-rating {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.2rem;
-  margin-top: 0.15rem;
-  font-size: 0.6rem;
-  color: var(--accent);
-}
-
 /* === News Section === */
 .news-list { display: flex; flex-direction: column; gap: 0.2rem; }
 
@@ -828,7 +819,7 @@ body::before {
   border-radius: 6px;
   background: rgba(255, 255, 255, 0.03);
   color: var(--text-dim);
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-inter), sans-serif;
   font-size: 0.68rem;
   font-weight: 500;
   cursor: pointer;
@@ -848,7 +839,7 @@ body::before {
   font-weight: 700;
 }
 
-/* News card body: flex column to push pagination to bottom */
+/* News card body */
 .card-news .card-body {
   display: flex;
   flex-direction: column;
@@ -870,18 +861,9 @@ body::before {
 
 /* === Responsive === */
 
-/* --- Large desktops / 1440p+ --- */
 @media (min-width: 1440px) {
-  :root {
-    --topbar-h: 58px;
-  }
-
-  .dashboard {
-    gap: 0.8rem;
-    padding: 0.8rem;
-  }
-
-  /* Topbar */
+  :root { --topbar-h: 58px; }
+  .dashboard { gap: 0.8rem; padding: 0.8rem; }
   .topbar { padding: 0 1.4rem; }
   .mage-svg { width: 42px; height: 42px; }
   .topbar-title { font-size: 1.3rem; }
@@ -889,40 +871,25 @@ body::before {
   .stat-pill { font-size: 0.76rem; padding: 0.3rem 0.75rem; gap: 0.4rem; }
   .stat-icon { font-size: 0.8rem; }
   .hero-clock { font-size: 0.76rem; }
-
-  /* Card headers */
   .card-header { padding: 0.75rem 1rem; gap: 0.6rem; }
   .card-header h2 { font-size: 0.95rem; }
   .card-icon-wrap { width: 32px; height: 32px; }
   .card-badge { font-size: 0.68rem; padding: 0.15rem 0.55rem; }
-
-  /* Card body */
   .card-body { padding: 0.85rem 1rem; }
-
-  /* Sale section — scale up */
   .sale-active-badge { font-size: 0.85rem; padding: 0.4rem 1rem; }
-
-  /* Reviews */
   .review-item { padding: 0.5rem 0.65rem; gap: 0.75rem; }
   .review-thumb { width: 64px; height: 30px; }
   .review-info h3 { font-size: 0.82rem; }
   .review-genres { font-size: 0.64rem; }
   .mc-score { width: 36px; height: 36px; font-size: 0.78rem; }
   .review-stats { font-size: 0.56rem; }
-
-  /* Releases — larger cards */
-  .releases-grid {
-    grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
-    gap: 0.7rem;
-  }
+  .releases-grid { grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); gap: 0.7rem; }
   .release-img-wrap { height: 100px; }
   .release-info { padding: 0.5rem 0.65rem; }
   .release-info h3 { font-size: 0.84rem; }
   .release-date { font-size: 0.74rem; }
   .release-countdown { font-size: 0.68rem; }
   .release-genres { font-size: 0.64rem; }
-
-  /* News */
   .news-item { padding: 0.5rem 0.7rem; gap: 0.75rem; }
   .news-item a { font-size: 0.86rem; }
   .news-source { font-size: 0.6rem; padding: 0.1rem 0.5rem; }
@@ -930,45 +897,27 @@ body::before {
   .news-page-btn { width: 30px; height: 30px; font-size: 0.74rem; }
 }
 
-/* --- Ultra-wide / 4K (1920p+) --- */
 @media (min-width: 1920px) {
-  :root {
-    --topbar-h: 64px;
-  }
-
-  .dashboard {
-    gap: 1rem;
-    padding: 1rem;
-  }
-
+  :root { --topbar-h: 64px; }
+  .dashboard { gap: 1rem; padding: 1rem; }
   .topbar { padding: 0 2rem; }
   .mage-svg { width: 48px; height: 48px; }
   .topbar-title { font-size: 1.5rem; }
   .topbar-subtitle { font-size: 0.65rem; }
   .stat-pill { font-size: 0.82rem; padding: 0.35rem 0.85rem; }
   .hero-clock { font-size: 0.82rem; }
-
   .card-header { padding: 0.85rem 1.2rem; }
   .card-header h2 { font-size: 1.05rem; }
   .card-icon-wrap { width: 36px; height: 36px; }
   .card-body { padding: 1rem 1.2rem; }
-
-  /* Sale */
   .sale-active-badge { font-size: 0.92rem; padding: 0.45rem 1.15rem; }
-
-  /* Reviews */
   .review-item { padding: 0.6rem 0.8rem; }
   .review-thumb { width: 72px; height: 34px; border-radius: 5px; }
   .review-info h3 { font-size: 0.9rem; }
   .review-genres { font-size: 0.68rem; }
   .mc-score { width: 40px; height: 40px; font-size: 0.84rem; border-radius: 7px; }
   .review-stats { font-size: 0.6rem; }
-
-  /* Releases */
-  .releases-grid {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 0.85rem;
-  }
+  .releases-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.85rem; }
   .release-img-wrap { height: 120px; }
   .release-info { padding: 0.6rem 0.75rem; }
   .release-info h3 { font-size: 0.92rem; }
@@ -976,8 +925,6 @@ body::before {
   .release-countdown { font-size: 0.74rem; }
   .release-genres { font-size: 0.7rem; }
   .platform-icon { width: 22px; height: 22px; font-size: 0.55rem; }
-
-  /* News */
   .news-item { padding: 0.6rem 0.85rem; }
   .news-item a { font-size: 0.92rem; }
   .news-source { font-size: 0.65rem; }
@@ -986,114 +933,65 @@ body::before {
   .news-pagination { gap: 0.4rem; padding-top: 0.6rem; }
 }
 
-/* --- Tablet / narrow desktop (<= 900px) --- */
 @media (max-width: 900px) {
   .topbar-center { display: none; }
   .topbar-subtitle { display: none; }
 }
 
-/* --- Mobile (<= 768px) --- */
 @media (max-width: 768px) {
-  :root {
-    --topbar-h: 46px;
-  }
-
+  :root { --topbar-h: 46px; }
   .topbar { padding: 0 0.7rem; }
   .mage-svg { width: 28px; height: 28px; }
   .topbar-title { font-size: 0.95rem; }
   .topbar-subtitle { display: none; }
   .topbar-center { display: none; }
   .hero-clock { font-size: 0.62rem; }
-
-  .dashboard {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-    gap: 0.5rem;
-    padding: 0.5rem;
-    overflow-y: auto;
-    height: calc(100vh - var(--topbar-h));
-  }
-
-  /* Give each card a reasonable height so content isn't crushed */
+  .dashboard { grid-template-columns: 1fr; grid-template-rows: auto; gap: 0.5rem; padding: 0.5rem; overflow-y: auto; height: calc(100vh - var(--topbar-h)); }
   .card { min-height: 220px; }
   .card-sale { min-height: 260px; }
-
-  /* Card headers slightly smaller */
   .card-header { padding: 0.5rem 0.7rem; }
   .card-header h2 { font-size: 0.78rem; }
   .card-icon-wrap { width: 24px; height: 24px; }
-
   .card-body { padding: 0.55rem 0.7rem; }
-
-  /* Sale */
   .card-sale .card-body { padding: 0.6rem; }
   .sale-visual { width: 25%; max-width: 60px; }
-
-  /* Releases */
-  .releases-grid {
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-    gap: 0.45rem;
-  }
+  .releases-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 0.45rem; }
   .release-img-wrap { height: 72px; }
   .release-info { padding: 0.35rem 0.45rem; }
   .release-info h3 { font-size: 0.7rem; }
   .release-date { font-size: 0.62rem; }
-
-  /* Reviews */
   .review-item { padding: 0.35rem 0.45rem; }
   .review-thumb { width: 48px; height: 22px; }
   .review-info h3 { font-size: 0.68rem; }
   .mc-score { width: 28px; height: 28px; font-size: 0.62rem; border-radius: 5px; }
   .review-stats { font-size: 0.46rem; }
-
-  /* News */
   .news-item { padding: 0.35rem 0.5rem; }
   .news-item a { font-size: 0.72rem; }
   .news-source { font-size: 0.5rem; }
   .news-meta { font-size: 0.58rem; }
   .news-page-btn { width: 24px; height: 24px; font-size: 0.64rem; }
-
   .ambient-orb { display: none; }
 }
 
-/* --- Small phones (<= 480px) --- */
 @media (max-width: 480px) {
-  :root {
-    --topbar-h: 42px;
-  }
-
+  :root { --topbar-h: 42px; }
   .topbar { padding: 0 0.5rem; }
   .mage-svg { width: 24px; height: 24px; }
   .topbar-title { font-size: 0.85rem; }
   .hero-clock { font-size: 0.56rem; }
-
-  .dashboard {
-    gap: 0.4rem;
-    padding: 0.4rem;
-  }
-
+  .dashboard { gap: 0.4rem; padding: 0.4rem; }
   .card { min-height: 200px; }
   .card-sale { min-height: 240px; }
-
   .card-header { padding: 0.4rem 0.6rem; }
   .card-header h2 { font-size: 0.72rem; }
-
-  /* Sale */
   .sale-visual { width: 20%; max-width: 48px; }
-
-  /* Releases */
-  .releases-grid {
-    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-    gap: 0.35rem;
-  }
+  .releases-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 0.35rem; }
   .release-img-wrap { height: 60px; }
   .release-info { padding: 0.3rem 0.4rem; }
   .release-info h3 { font-size: 0.66rem; }
   .release-date { font-size: 0.58rem; }
   .release-countdown { font-size: 0.54rem; }
   .release-genres { font-size: 0.52rem; }
-
-  /* News */
   .news-item a { font-size: 0.68rem; }
   .news-source { font-size: 0.48rem; }
 }
