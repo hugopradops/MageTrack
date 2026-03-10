@@ -1,0 +1,12 @@
+node_modules
+.next
+.git
+.gitignore
+*.md
+.prettierrc
+eslint.config.mjs
+vitest.config.ts
+vitest.setup.ts
+**/__tests__
+**/*.test.*
+.env*
