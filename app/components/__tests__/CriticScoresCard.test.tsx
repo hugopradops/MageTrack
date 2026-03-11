@@ -16,7 +16,7 @@ describe('CriticScoresCard', () => {
   it('renders skeleton loader initially', () => {
     mockFetch.mockReturnValue(new Promise(() => {})); // never resolves
     render(<CriticScoresCard />);
-    expect(screen.getByText('Critic Scores')).toBeInTheDocument();
+    expect(screen.getByText('Community Reviews')).toBeInTheDocument();
     expect(document.querySelector('.skeleton-loader')).toBeInTheDocument();
   });
 
@@ -32,7 +32,7 @@ describe('CriticScoresCard', () => {
               tier: 'Mighty',
               platforms: ['PC'],
               image: null,
-              url: 'https://opencritic.com/game/1/test-game',
+              url: 'https://store.steampowered.com/app/1',
             },
           ],
         }),
@@ -41,7 +41,7 @@ describe('CriticScoresCard', () => {
     render(<CriticScoresCard />);
 
     expect(await screen.findByText('Test Game')).toBeInTheDocument();
-    expect(screen.getByText('92')).toBeInTheDocument();
+    expect(screen.getByText('92%')).toBeInTheDocument();
     expect(screen.getByText('Mighty')).toBeInTheDocument();
   });
 
