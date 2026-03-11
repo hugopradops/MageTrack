@@ -16,59 +16,96 @@ interface CriticResult {
   games: CriticGame[];
 }
 
+function scoreTier(score: number): string {
+  if (score >= 90) return 'Mighty';
+  if (score >= 75) return 'Strong';
+  if (score >= 50) return 'Fair';
+  return 'Weak';
+}
+
+function platformList(p: { windows?: boolean; mac?: boolean; linux?: boolean }): string[] {
+  const list: string[] = [];
+  if (p.windows) list.push('PC');
+  if (p.mac) list.push('Mac');
+  if (p.linux) list.push('Linux');
+  return list;
+}
+
+async function fetchAppDetails(appId: number): Promise<CriticGame | null> {
+  try {
+    const res = await fetch(
+      `https://store.steampowered.com/api/appdetails?appids=${appId}`,
+      { headers: { 'User-Agent': 'MageTrack/1.0' } },
+    );
+    if (!res.ok) return null;
+    const json = await res.json();
+    const entry = json[String(appId)];
+    if (!entry?.success) return null;
+
+    const d = entry.data;
+    const metacritic = d.metacritic;
+    if (!metacritic || !metacritic.score) return null;
+
+    return {
+      id: appId,
+      name: d.name,
+      score: metacritic.score,
+      tier: scoreTier(metacritic.score),
+      releaseDate: d.release_date?.date || null,
+      platforms: platformList(d.platforms || {}),
+      image: d.header_image || null,
+      url: `https://store.steampowered.com/app/${appId}`,
+    };
+  } catch {
+    return null;
+  }
+}
+
 export async function GET() {
   const cached = getCached<CriticResult>('metacritic', 60 * 60 * 1000);
   if (cached) return NextResponse.json(cached);
 
   try {
-    const response = await fetch('https://api.opencritic.com/api/game/popular', {
-      headers: { 'User-Agent': 'MageTrack/1.0' },
-    });
+    // Gather app IDs from multiple Steam categories
+    const [catRes, featRes] = await Promise.all([
+      fetch('https://store.steampowered.com/api/featuredcategories/', {
+        headers: { 'User-Agent': 'MageTrack/1.0' },
+      }),
+      fetch('https://store.steampowered.com/api/featured/', {
+        headers: { 'User-Agent': 'MageTrack/1.0' },
+      }),
+    ]);
 
-    if (!response.ok) throw new Error(`OpenCritic API returned ${response.status}`);
-    const data = await response.json();
+    if (!catRes.ok) throw new Error(`Steam categories returned ${catRes.status}`);
 
-    const games: CriticGame[] = data
-      .filter(
-        (g: { topCriticScore?: number }) => g.topCriticScore && g.topCriticScore > 0,
-      )
-      .map(
-        (g: {
-          id: number;
-          name: string;
-          topCriticScore: number;
-          tier?: string;
-          firstReleaseDate?: string;
-          Platforms?: Array<{ shortName?: string }>;
-          images?: {
-            banner?: { og?: string };
-            box?: { og?: string };
-          };
-        }) => ({
-          id: g.id,
-          name: g.name,
-          score: Math.round(g.topCriticScore),
-          tier: g.tier || 'N/A',
-          releaseDate: g.firstReleaseDate || null,
-          platforms: (g.Platforms || []).map((p) => p.shortName).filter(Boolean),
-          image:
-            g.images && g.images.banner && g.images.banner.og
-              ? `https://img.opencritic.com/${g.images.banner.og}`
-              : g.images && g.images.box && g.images.box.og
-                ? `https://img.opencritic.com/${g.images.box.og}`
-                : null,
-          url: `https://opencritic.com/game/${g.id}/${encodeURIComponent(
-            g.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-          )}`,
-        }),
-      )
-      .slice(0, 9);
+    const catData = await catRes.json();
+    const featData = featRes.ok ? await featRes.json() : {};
+
+    // Collect unique app IDs from top sellers, new releases, specials, and featured
+    const idSet = new Set<number>();
+    for (const key of ['top_sellers', 'new_releases', 'specials']) {
+      for (const item of catData[key]?.items || []) {
+        idSet.add(item.id);
+      }
+    }
+    for (const item of featData.featured_win || []) {
+      idSet.add(item.id);
+    }
+
+    const appIds = [...idSet];
+    if (appIds.length === 0) throw new Error('No games found from Steam');
+
+    // Fetch details for all apps in parallel
+    const results = await Promise.all(appIds.map(fetchAppDetails));
+
+    // Filter to games that have metacritic scores, keep discovery order
+    const games = results.filter((g): g is CriticGame => g !== null).slice(0, 9);
 
     const result: CriticResult = { games };
     if (games.length > 0) setCache('metacritic', result);
     return NextResponse.json(result);
   } catch (err) {
-    console.error('OpenCritic error:', (err as Error).message);
+    console.error('Steam critic scores error:', (err as Error).message);
     return NextResponse.json({ error: 'Failed to load critic scores' }, { status: 500 });
   }
 }
