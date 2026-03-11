@@ -20,16 +20,6 @@ function scoreClass(score: number) {
   return 'mc-unfavorable';
 }
 
-function tierLabel(tier: string) {
-  const labels: Record<string, string> = {
-    Mighty: 'Mighty',
-    Strong: 'Strong',
-    Fair: 'Fair',
-    Weak: 'Weak',
-  };
-  return labels[tier] || tier || '';
-}
-
 const GAMES_PER_PAGE = 3;
 
 export default function CriticScoresCard() {
@@ -67,7 +57,7 @@ export default function CriticScoresCard() {
             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
           </svg>
         </div>
-        <h2>Popular Critic Scores</h2>
+        <h2>Community Reviews</h2>
         {games && games.length > 0 && (
           <span className="card-badge" id="reviews-count">
             {games.length} games
@@ -116,8 +106,8 @@ export default function CriticScoresCard() {
                         </div>
                       </div>
                       <div className="review-score-wrap">
-                        <span className={`mc-score ${cls}`}>{g.score}</span>
-                        <span className="review-stats">{tierLabel(g.tier)}</span>
+                        <span className={`mc-score ${cls}`}>{g.score}%</span>
+                        <span className="review-stats">{g.tier}</span>
                       </div>
                     </a>
                   );

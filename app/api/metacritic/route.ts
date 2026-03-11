@@ -16,13 +16,6 @@ interface CriticResult {
   games: CriticGame[];
 }
 
-function scoreTier(score: number): string {
-  if (score >= 90) return 'Mighty';
-  if (score >= 75) return 'Strong';
-  if (score >= 50) return 'Fair';
-  return 'Weak';
-}
-
 function platformList(p: { windows?: boolean; mac?: boolean; linux?: boolean }): string[] {
   const list: string[] = [];
   if (p.windows) list.push('PC');
@@ -31,26 +24,41 @@ function platformList(p: { windows?: boolean; mac?: boolean; linux?: boolean }):
   return list;
 }
 
-async function fetchAppDetails(appId: number): Promise<CriticGame | null> {
+async function fetchGameData(appId: number): Promise<CriticGame | null> {
   try {
-    const res = await fetch(
-      `https://store.steampowered.com/api/appdetails?appids=${appId}`,
-      { headers: { 'User-Agent': 'MageTrack/1.0' } },
-    );
-    if (!res.ok) return null;
-    const json = await res.json();
-    const entry = json[String(appId)];
+    // Fetch app details and user reviews in parallel
+    const [detailRes, reviewRes] = await Promise.all([
+      fetch(`https://store.steampowered.com/api/appdetails?appids=${appId}`, {
+        headers: { 'User-Agent': 'MageTrack/1.0' },
+      }),
+      fetch(
+        `https://store.steampowered.com/appreviews/${appId}?json=1&language=all&purchase_type=all&num_per_page=0`,
+        { headers: { 'User-Agent': 'MageTrack/1.0' } },
+      ),
+    ]);
+
+    if (!detailRes.ok || !reviewRes.ok) return null;
+
+    const detailJson = await detailRes.json();
+    const reviewJson = await reviewRes.json();
+
+    const entry = detailJson[String(appId)];
     if (!entry?.success) return null;
 
     const d = entry.data;
-    const metacritic = d.metacritic;
-    if (!metacritic || !metacritic.score) return null;
+    const summary = reviewJson.query_summary;
+    if (!summary || summary.total_reviews < 10000) return null;
+
+    const positivePercent = Math.round(
+      (summary.total_positive / summary.total_reviews) * 100,
+    );
+    const tier = summary.review_score_desc || '';
 
     return {
       id: appId,
       name: d.name,
-      score: metacritic.score,
-      tier: scoreTier(metacritic.score),
+      score: positivePercent,
+      tier,
       releaseDate: d.release_date?.date || null,
       platforms: platformList(d.platforms || {}),
       image: d.header_image || null,
@@ -95,10 +103,10 @@ export async function GET() {
     const appIds = [...idSet];
     if (appIds.length === 0) throw new Error('No games found from Steam');
 
-    // Fetch details for all apps in parallel
-    const results = await Promise.all(appIds.map(fetchAppDetails));
+    // Fetch details + reviews for all apps in parallel
+    const results = await Promise.all(appIds.map(fetchGameData));
 
-    // Filter to games that have metacritic scores, keep discovery order
+    // Filter valid games, keep discovery order, take top 9
     const games = results.filter((g): g is CriticGame => g !== null).slice(0, 9);
 
     const result: CriticResult = { games };
