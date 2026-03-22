@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useItemsPerPage } from '@/lib/useItemsPerPage';
 
 interface Article {
   title: string;
@@ -9,7 +10,13 @@ interface Article {
   source: string;
 }
 
-const NEWS_PER_PAGE = 4;
+// [minViewportHeight, itemsPerPage]
+// 1080p browser viewport ≈ 930px, 1440p ≈ 1300px
+const NEWS_BREAKPOINTS: [number, number][] = [
+  [0, 4], // 1080p and below: 4 items
+  [1100, 5], // 1200p–1439p: 5 items
+  [1300, 7], // 1440p+: 7 items
+];
 
 function timeAgo(dateStr: string | null) {
   if (!dateStr) return '';
@@ -41,6 +48,7 @@ export default function NewsCard() {
   const [articles, setArticles] = useState<Article[] | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [error, setError] = useState(false);
+  const newsPerPage = useItemsPerPage(NEWS_BREAKPOINTS, 4);
 
   useEffect(() => {
     async function load() {
@@ -62,9 +70,10 @@ export default function NewsCard() {
     load();
   }, []);
 
-  const totalPages = articles ? Math.ceil(articles.length / NEWS_PER_PAGE) : 0;
-  const start = (currentPage - 1) * NEWS_PER_PAGE;
-  const pageArticles = articles ? articles.slice(start, start + NEWS_PER_PAGE) : [];
+  const totalPages = articles ? Math.ceil(articles.length / newsPerPage) : 0;
+  const clampedPage = Math.min(currentPage, Math.max(1, totalPages));
+  const start = (clampedPage - 1) * newsPerPage;
+  const pageArticles = articles ? articles.slice(start, start + newsPerPage) : [];
 
   return (
     <section className="card card-news" id="news-section">

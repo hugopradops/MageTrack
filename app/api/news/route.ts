@@ -28,7 +28,7 @@ export async function GET() {
   const feedPromises = feeds.map(async (feed) => {
     try {
       const parsed = await rssParser.parseURL(feed.url);
-      return (parsed.items || []).slice(0, 5).map((item) => ({
+      return (parsed.items || []).slice(0, 7).map((item) => ({
         title: item.title,
         link: item.link,
         date: item.pubDate || item.isoDate || null,
@@ -48,7 +48,7 @@ export async function GET() {
   articles.sort(
     (a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime(),
   );
-  const result: NewsResult = { articles: articles.slice(0, 12) };
+  const result: NewsResult = { articles: articles.slice(0, 21) };
   setCache('news', result);
   return NextResponse.json(result);
 }

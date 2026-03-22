@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useItemsPerPage } from '@/lib/useItemsPerPage';
 
 interface CriticGame {
   id: number;
@@ -20,12 +21,19 @@ function scoreClass(score: number) {
   return 'mc-unfavorable';
 }
 
-const GAMES_PER_PAGE = 3;
+// [minViewportHeight, itemsPerPage]
+// 1080p browser viewport ≈ 930px, 1440p ≈ 1300px
+const REVIEW_BREAKPOINTS: [number, number][] = [
+  [0, 3], // 1080p and below: 3 items
+  [1100, 4], // 1200p–1439p: 4 items
+  [1300, 5], // 1440p+: 5 items
+];
 
 export default function CriticScoresCard() {
   const [games, setGames] = useState<CriticGame[] | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [error, setError] = useState(false);
+  const gamesPerPage = useItemsPerPage(REVIEW_BREAKPOINTS, 3);
 
   useEffect(() => {
     async function load() {
@@ -78,45 +86,47 @@ export default function CriticScoresCard() {
         ) : (
           <>
             <div className="reviews-list">
-              {games
-                .slice((currentPage - 1) * GAMES_PER_PAGE, currentPage * GAMES_PER_PAGE)
-                .map((g) => {
-                  const cls = scoreClass(g.score);
-                  const platforms = (g.platforms || []).join(' · ');
-                  return (
-                    <a
-                      key={g.id}
-                      href={g.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`review-item ${cls}`}
-                    >
-                      <div className="review-thumb">
-                        {g.image ? (
-                          /* eslint-disable-next-line @next/next/no-img-element */
-                          <img src={g.image} alt={g.name} loading="lazy" />
-                        ) : (
-                          <div className="review-thumb-placeholder">?</div>
-                        )}
+              {(() => {
+                const maxPage = Math.max(1, Math.ceil(games.length / gamesPerPage));
+                const page = Math.min(currentPage, maxPage);
+                return games.slice((page - 1) * gamesPerPage, page * gamesPerPage);
+              })().map((g) => {
+                const cls = scoreClass(g.score);
+                const platforms = (g.platforms || []).join(' · ');
+                return (
+                  <a
+                    key={g.id}
+                    href={g.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`review-item ${cls}`}
+                  >
+                    <div className="review-thumb">
+                      {g.image ? (
+                        /* eslint-disable-next-line @next/next/no-img-element */
+                        <img src={g.image} alt={g.name} loading="lazy" />
+                      ) : (
+                        <div className="review-thumb-placeholder">?</div>
+                      )}
+                    </div>
+                    <div className="review-info">
+                      <h3>{g.name}</h3>
+                      <div className="review-meta">
+                        <span className="review-genres">{platforms}</span>
                       </div>
-                      <div className="review-info">
-                        <h3>{g.name}</h3>
-                        <div className="review-meta">
-                          <span className="review-genres">{platforms}</span>
-                        </div>
-                      </div>
-                      <div className="review-score-wrap">
-                        <span className={`mc-score ${cls}`}>{g.score}%</span>
-                        <span className="review-stats">{g.tier}</span>
-                      </div>
-                    </a>
-                  );
-                })}
+                    </div>
+                    <div className="review-score-wrap">
+                      <span className={`mc-score ${cls}`}>{g.score}%</span>
+                      <span className="review-stats">{g.tier}</span>
+                    </div>
+                  </a>
+                );
+              })}
             </div>
-            {games.length > GAMES_PER_PAGE && (
+            {games.length > gamesPerPage && (
               <div className="news-pagination">
                 {Array.from(
-                  { length: Math.ceil(games.length / GAMES_PER_PAGE) },
+                  { length: Math.ceil(games.length / gamesPerPage) },
                   (_, i) => i + 1,
                 ).map((page) => (
                   <button

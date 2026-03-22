@@ -25,10 +25,7 @@ export default tseslint.config(
       ...reactPlugin.configs.flat?.['jsx-runtime']?.rules,
       ...hooksPlugin.configs.recommended.rules,
       'prettier/prettier': 'warn',
-      '@typescript-eslint/no-unused-vars': [
-        'warn',
-        { argsIgnorePattern: '^_' },
-      ],
+      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
     },
     settings: {
       react: { version: 'detect' },

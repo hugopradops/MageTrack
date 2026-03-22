@@ -79,7 +79,7 @@ async function fetchSteamMostWishlisted(): Promise<Game[]> {
     });
   }
 
-  const detailPromises = entries.slice(0, 40).map(async (entry) => {
+  const detailPromises = entries.slice(0, 50).map(async (entry) => {
     try {
       const detailUrl = `https://store.steampowered.com/api/appdetails?appids=${entry.appid}`;
       const resp = await fetch(detailUrl);

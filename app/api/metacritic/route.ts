@@ -110,8 +110,8 @@ export async function GET() {
     // Fetch details + reviews for all apps in parallel
     const results = await Promise.all(appIds.map(fetchGameData));
 
-    // Filter valid games, keep discovery order, take top 9
-    const games = results.filter((g): g is CriticGame => g !== null).slice(0, 9);
+    // Filter valid games, keep discovery order, take top 15
+    const games = results.filter((g): g is CriticGame => g !== null).slice(0, 15);
 
     const result: CriticResult = { games };
     if (games.length > 0) setCache('metacritic', result);
