@@ -106,32 +106,32 @@ export default function TopBar() {
           <p className="topbar-subtitle">Your Handy PC Gaming Tool</p>
         </div>
       </div>
-      <div className="topbar-center">
-        <div className="stat-pill" id="stat-sale">
-          <span className="stat-icon">
+      <nav className="topbar-center" aria-label="Dashboard sections">
+        <a className="stat-pill" href="#sale-section" id="stat-sale">
+          <span className="stat-icon" aria-hidden="true">
             <FlameIcon />
           </span>
           <span className="stat-text" id="stat-sale-text">
             {saleText}
           </span>
-        </div>
-        <div className="stat-pill" id="stat-releases">
-          <span className="stat-icon">
+        </a>
+        <a className="stat-pill" href="#releases-section" id="stat-releases">
+          <span className="stat-icon" aria-hidden="true">
             <RocketIcon />
           </span>
           <span className="stat-text" id="stat-releases-text">
             {releasesText}
           </span>
-        </div>
-        <div className="stat-pill" id="stat-news">
-          <span className="stat-icon">
+        </a>
+        <a className="stat-pill" href="#news-section" id="stat-news">
+          <span className="stat-icon" aria-hidden="true">
             <NewsIcon />
           </span>
           <span className="stat-text" id="stat-news-text">
             {newsText}
           </span>
-        </div>
-      </div>
+        </a>
+      </nav>
       <div className="topbar-right">
         <div className="hero-clock" id="hero-clock">
           {clock}

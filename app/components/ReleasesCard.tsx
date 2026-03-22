@@ -126,8 +126,23 @@ export default function ReleasesCard() {
       </div>
       <div className="card-body card-body-scroll" id="releases-content">
         {error ? (
-          <div className="error-msg">
-            <span className="error-icon">🚀</span>Failed to load releases.
+          <div className="error-msg" role="alert">
+            <svg
+              className="error-icon-svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 00-2.91-.09z" />
+              <path d="M12 15l-3-3a22 22 0 012-3.95A12.88 12.88 0 0122 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 01-4 2z" />
+            </svg>
+            Failed to load releases.
           </div>
         ) : games === null ? (
           <div className="skeleton-loader skeleton-grid">
@@ -138,7 +153,24 @@ export default function ReleasesCard() {
           </div>
         ) : games.length === 0 ? (
           <div className="error-msg">
-            <span className="error-icon">🎮</span>No upcoming releases found.
+            <svg
+              className="error-icon-svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <rect x="2" y="6" width="20" height="12" rx="2" />
+              <path d="M6 12h4" />
+              <path d="M14 12h.01" />
+              <path d="M18 12h.01" />
+            </svg>
+            No upcoming releases found.
           </div>
         ) : (
           <div className="releases-grid">

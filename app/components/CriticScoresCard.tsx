@@ -74,8 +74,22 @@ export default function CriticScoresCard() {
       </div>
       <div className="card-body" id="reviews-content">
         {error ? (
-          <div className="error-msg">
-            <span className="error-icon">⭐</span>Failed to load critic scores.
+          <div className="error-msg" role="alert">
+            <svg
+              className="error-icon-svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg>
+            Failed to load critic scores.
           </div>
         ) : games === null ? (
           <div className="skeleton-loader">
@@ -116,15 +130,22 @@ export default function CriticScoresCard() {
                       </div>
                     </div>
                     <div className="review-score-wrap">
-                      <span className={`mc-score ${cls}`}>{g.score}%</span>
-                      <span className="review-stats">{g.tier}</span>
+                      <span
+                        className={`mc-score ${cls}`}
+                        aria-label={`Score: ${g.score}%, ${g.tier}`}
+                      >
+                        {g.score}%
+                      </span>
+                      <span className="review-stats" aria-hidden="true">
+                        {g.tier}
+                      </span>
                     </div>
                   </a>
                 );
               })}
             </div>
             {games.length > gamesPerPage && (
-              <div className="news-pagination">
+              <nav className="news-pagination" aria-label="Reviews pagination">
                 {Array.from(
                   { length: Math.ceil(games.length / gamesPerPage) },
                   (_, i) => i + 1,
@@ -133,11 +154,13 @@ export default function CriticScoresCard() {
                     key={page}
                     className={`news-page-btn${page === currentPage ? ' active' : ''}`}
                     onClick={() => setCurrentPage(page)}
+                    aria-label={`Page ${page}`}
+                    aria-current={page === currentPage ? 'page' : undefined}
                   >
                     {page}
                   </button>
                 ))}
-              </div>
+              </nav>
             )}
           </>
         )}

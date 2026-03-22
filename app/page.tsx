@@ -7,6 +7,10 @@ import NewsCard from './components/NewsCard';
 export default function Home() {
   return (
     <>
+      <a href="#dashboard" className="skip-link">
+        Skip to content
+      </a>
+
       {/* Gradient mesh background — pure CSS, no canvas needed */}
       <div className="bg-mesh" aria-hidden="true">
         <div className="bg-blob bg-blob-1"></div>
@@ -16,7 +20,7 @@ export default function Home() {
 
       <TopBar />
 
-      <main className="dashboard">
+      <main className="dashboard" id="dashboard">
         <div className="bento-sale">
           <SaleCard />
         </div>

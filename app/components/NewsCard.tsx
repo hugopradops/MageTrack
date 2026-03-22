@@ -104,8 +104,25 @@ export default function NewsCard() {
       </div>
       <div className="card-body" id="news-content">
         {error ? (
-          <div className="error-msg">
-            <span className="error-icon">📰</span>Failed to load news.
+          <div className="error-msg" role="alert">
+            <svg
+              className="error-icon-svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M4 22h16a2 2 0 002-2V4a2 2 0 00-2-2H8a2 2 0 00-2 2v16a2 2 0 01-2 2zm0 0a2 2 0 01-2-2v-9c0-1.1.9-2 2-2h2" />
+              <path d="M18 14h-8" />
+              <path d="M15 18h-5" />
+              <path d="M10 6h8v4h-8V6z" />
+            </svg>
+            Failed to load news.
           </div>
         ) : articles === null ? (
           <div className="skeleton-loader">
@@ -117,7 +134,25 @@ export default function NewsCard() {
           </div>
         ) : articles.length === 0 ? (
           <div className="error-msg">
-            <span className="error-icon">📜</span>No news available right now.
+            <svg
+              className="error-icon-svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+              <path d="M14 2v6h6" />
+              <path d="M16 13H8" />
+              <path d="M16 17H8" />
+              <path d="M10 9H8" />
+            </svg>
+            No news available right now.
           </div>
         ) : (
           <>
@@ -139,17 +174,19 @@ export default function NewsCard() {
               ))}
             </div>
             {totalPages > 1 && (
-              <div className="news-pagination">
+              <nav className="news-pagination" aria-label="News pagination">
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                   <button
                     key={page}
                     className={`news-page-btn${page === currentPage ? ' active' : ''}`}
                     onClick={() => setCurrentPage(page)}
+                    aria-label={`Page ${page}`}
+                    aria-current={page === currentPage ? 'page' : undefined}
                   >
                     {page}
                   </button>
                 ))}
-              </div>
+              </nav>
             )}
           </>
         )}

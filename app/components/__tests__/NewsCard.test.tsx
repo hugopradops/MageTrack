@@ -66,7 +66,7 @@ describe('NewsCard', () => {
     expect(await screen.findByText('Article 1')).toBeInTheDocument();
 
     // Should show pagination (5 per page, 8 articles = 2 pages)
-    const page2Btn = screen.getByRole('button', { name: '2' });
+    const page2Btn = screen.getByRole('button', { name: 'Page 2' });
     expect(page2Btn).toBeInTheDocument();
 
     // Click page 2

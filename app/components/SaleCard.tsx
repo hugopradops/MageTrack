@@ -108,8 +108,22 @@ export default function SaleCard() {
       </div>
       <div className="card-body" id="sale-content">
         {error ? (
-          <div className="error-msg">
-            <span className="error-icon">⚡</span>Failed to load sale data.
+          <div className="error-msg" role="alert">
+            <svg
+              className="error-icon-svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+            </svg>
+            Failed to load sale data.
           </div>
         ) : !saleData ? (
           <div className="skeleton-loader">
@@ -119,7 +133,23 @@ export default function SaleCard() {
           </div>
         ) : !saleData.next ? (
           <div className="error-msg">
-            <span className="error-icon">🔮</span>No upcoming sales found.
+            <svg
+              className="error-icon-svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 16v-4" />
+              <path d="M12 8h.01" />
+            </svg>
+            No upcoming sales found.
           </div>
         ) : (
           <>
@@ -176,9 +206,13 @@ export default function SaleCard() {
             )}
 
             {/* Countdown — only this part updates every second */}
-            <div id="sale-countdown-wrap">
+            <div id="sale-countdown-wrap" aria-live="polite" aria-atomic="true">
               {countdown ? (
-                <div className="countdown">
+                <div
+                  className="countdown"
+                  role="timer"
+                  aria-label={`${countdown.days} days, ${countdown.hours} hours, ${countdown.minutes} minutes, ${countdown.seconds} seconds remaining`}
+                >
                   <div className="countdown-unit">
                     <div className="countdown-value">{countdown.days}</div>
                     <div className="countdown-label">Days</div>
