@@ -26,7 +26,7 @@ function scoreClass(score: number) {
 const REVIEW_BREAKPOINTS: [number, number][] = [
   [0, 3], // 1080p and below: 3 items
   [1100, 4], // 1200p–1439p: 4 items
-  [1300, 5], // 1440p+: 5 items
+  [1300, 4], // 1440p+: 4 items
 ];
 
 export default function CriticScoresCard() {
