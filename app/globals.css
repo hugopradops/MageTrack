@@ -264,7 +264,7 @@ body {
   color: var(--text);
   letter-spacing: 0.02em;
   line-height: 1;
-  padding-bottom: 0.15rem;
+  padding-bottom: 0.3rem;
 }
 
 .topbar-subtitle {
@@ -724,7 +724,6 @@ body {
   text-decoration: none;
   color: inherit;
   cursor: pointer;
-  flex: 1;
 }
 
 .review-item:hover {
@@ -1005,7 +1004,6 @@ body {
   background: transparent;
   border: 1px solid transparent;
   transition: all var(--duration) var(--ease);
-  flex: 1;
 }
 
 .news-item:hover {

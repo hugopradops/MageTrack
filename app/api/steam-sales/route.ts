@@ -26,7 +26,7 @@ export async function GET() {
     const next = upcoming[0] || null;
     const active = next && next.startDate <= now;
 
-    return NextResponse.json({ next, active, allUpcoming: upcoming });
+    return NextResponse.json({ next, active });
   } catch (err) {
     console.error('Steam sales error:', (err as Error).message);
     return NextResponse.json(

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useItemsPerPage } from '@/lib/useItemsPerPage';
+import { dispatchStat } from '@/lib/utils';
 
 interface Article {
   title: string;
@@ -38,10 +39,6 @@ function getSourceClass(source: string) {
   if (s.includes('kotaku')) return 'news-source-kotaku';
   if (s.includes('rock paper')) return 'news-source-rps';
   return 'news-source-default';
-}
-
-function dispatchStat(key: string, value: string) {
-  window.dispatchEvent(new CustomEvent('stat-update', { detail: { key, value } }));
 }
 
 export default function NewsCard() {

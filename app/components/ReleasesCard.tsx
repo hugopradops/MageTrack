@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { dispatchStat } from '@/lib/utils';
 
 interface Game {
   name: string;
@@ -66,10 +67,6 @@ function getPlatformIcons(platforms: string[]) {
       ))}
     </div>
   );
-}
-
-function dispatchStat(key: string, value: string) {
-  window.dispatchEvent(new CustomEvent('stat-update', { detail: { key, value } }));
 }
 
 export default function ReleasesCard() {

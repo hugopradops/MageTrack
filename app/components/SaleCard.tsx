@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { dispatchStat } from '@/lib/utils';
 
 function timeUntil(dateStr: string) {
   const diff = new Date(dateStr).getTime() - Date.now();
@@ -31,10 +32,6 @@ function formatDate(dateStr: string) {
 interface SaleData {
   next: { name: string; start: string; end: string } | null;
   active: boolean;
-}
-
-function dispatchStat(key: string, value: string) {
-  window.dispatchEvent(new CustomEvent('stat-update', { detail: { key, value } }));
 }
 
 export default function SaleCard() {

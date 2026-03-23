@@ -6,8 +6,8 @@ const rssParser = new RSSParser();
 
 interface NewsResult {
   articles: Array<{
-    title: string | undefined;
-    link: string | undefined;
+    title: string;
+    link: string;
     date: string | null;
     source: string;
   }>;
@@ -28,12 +28,15 @@ export async function GET() {
   const feedPromises = feeds.map(async (feed) => {
     try {
       const parsed = await rssParser.parseURL(feed.url);
-      return (parsed.items || []).slice(0, 7).map((item) => ({
-        title: item.title,
-        link: item.link,
-        date: item.pubDate || item.isoDate || null,
-        source: feed.source,
-      }));
+      return (parsed.items || [])
+        .filter((item) => item.title && item.link)
+        .slice(0, 7)
+        .map((item) => ({
+          title: item.title!,
+          link: item.link!,
+          date: item.pubDate || item.isoDate || null,
+          source: feed.source,
+        }));
     } catch (err) {
       console.error(`RSS error (${feed.source}):`, (err as Error).message);
       return [];

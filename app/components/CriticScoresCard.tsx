@@ -33,6 +33,7 @@ export default function CriticScoresCard() {
   const [games, setGames] = useState<CriticGame[] | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [error, setError] = useState(false);
+  const [imgErrors, setImgErrors] = useState<Set<number>>(new Set());
   const gamesPerPage = useItemsPerPage(REVIEW_BREAKPOINTS, 3);
 
   useEffect(() => {
@@ -116,9 +117,14 @@ export default function CriticScoresCard() {
                     className={`review-item ${cls}`}
                   >
                     <div className="review-thumb">
-                      {g.image ? (
+                      {g.image && !imgErrors.has(g.id) ? (
                         /* eslint-disable-next-line @next/next/no-img-element */
-                        <img src={g.image} alt={g.name} loading="lazy" />
+                        <img
+                          src={g.image}
+                          alt={g.name}
+                          loading="lazy"
+                          onError={() => setImgErrors((prev) => new Set(prev).add(g.id))}
+                        />
                       ) : (
                         <div className="review-thumb-placeholder">?</div>
                       )}

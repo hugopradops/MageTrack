@@ -1,3 +1,8 @@
+// Dispatch a stat update event consumed by TopBar
+export function dispatchStat(key: string, value: string) {
+  window.dispatchEvent(new CustomEvent('stat-update', { detail: { key, value } }));
+}
+
 // Shared HTML entity decoder used by the releases API
 export function decodeHTMLEntities(str: string): string {
   return str
