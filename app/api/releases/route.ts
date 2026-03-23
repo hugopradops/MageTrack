@@ -137,7 +137,7 @@ export async function GET() {
   if (cached) return NextResponse.json(cached);
 
   try {
-    const games = await fetchSteamMostWishlisted();
+    const games = (await fetchSteamMostWishlisted()).slice(0, 10);
     const result: ReleasesResult = { games };
     if (games.length > 0) {
       setCache('releases', result);

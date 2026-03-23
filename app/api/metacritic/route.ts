@@ -111,7 +111,7 @@ export async function GET() {
     const results = await Promise.all(appIds.map(fetchGameData));
 
     // Filter valid games, keep discovery order, take top 15
-    const games = results.filter((g): g is CriticGame => g !== null).slice(0, 15);
+    const games = results.filter((g): g is CriticGame => g !== null).slice(0, 12);
 
     const result: CriticResult = { games };
     if (games.length > 0) setCache('metacritic', result);

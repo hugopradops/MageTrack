@@ -709,7 +709,6 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
-  flex: 1;
 }
 
 .review-item {
